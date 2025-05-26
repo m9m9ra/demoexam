@@ -1,12 +1,12 @@
+import * as cors from "cors"
+import * as path from "path"
 import * as express from "express"
 import * as bodyParser from "body-parser"
-import * as cors from "cors";
-const engine = require('express-engine-jsx');
 import { Request, Response } from "express"
 import { AppDataSource } from "./config/data-source"
-import { Routes } from "./config/routes"
-import * as path from "path";
-import { migrate } from "./migration/xlsx_import";
+import { Routes } from "./routes"
+import { migrate } from "./migration/ImportData1722000000000"
+
 
 AppDataSource.initialize().then(async () => {
 
@@ -17,11 +17,6 @@ AppDataSource.initialize().then(async () => {
     app.use(express.urlencoded({ extended: false }));
     app.use(express.static(path.join(__dirname, '../public')));
     app.use(cors());
-
-    // Express view engine
-    app.set('views', path.join(__dirname, 'views'));
-    app.set('view engine', 'jsx');
-    app.engine('jsx', engine);
 
     // register express routes from defined application routes
     Routes.forEach(route => {
@@ -36,8 +31,15 @@ AppDataSource.initialize().then(async () => {
         })
     })
 
-    await migrate();
+    // setup express app here
+    const migrateRunner = new migrate();
+    // await migrateRunner.productType();
+    // await migrateRunner.materialType();
+    // await migrateRunner.material();
+    // await migrateRunner.product();
+    // await migrateRunner.productMaterial();
 
+    // start express server
     app.listen(3000)
 
     console.log("Express server has started on port 3000. Open http://localhost:3000/users to see results")

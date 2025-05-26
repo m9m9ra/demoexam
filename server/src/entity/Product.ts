@@ -1,27 +1,28 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ProductType } from "./ProductType";
-import { SalesHistory } from "./SalesHistory";
+import { ProductMaterial } from "./ProductMaterial";
 
-@Entity("products")
+@Entity()
 export class Product {
-    @PrimaryGeneratedColumn()
-    product_id;
+    @PrimaryGeneratedColumn({ type: 'int' })
+    product_id: number;
 
-    @Column({ type: "varchar", length: 100, nullable: false })
-    product_name;
+    @ManyToOne(() => ProductType, (product_type) => product_type.product)
+    productType: ProductType;
 
-    @Column({ type: "integer" })
-    product_type_id;
+    @Column({ type: 'varchar' })
+    name: string;
 
-    @Column({ type: "integer" })
-    quantity_in_stock;
+    @Column({type: 'integer'})
+    article: number
 
-    @Column({ type: "decimal", precision: 10, scale: 2 })
-    price;
+    @Column({ type: 'decimal' })
+    minCost: number;
 
-    @ManyToOne(() => ProductType, (product_type) => product_type.products)
-    product_type;
+    @Column({ type: 'decimal' })
+    rollWidth: number;
 
-    @OneToMany(() => SalesHistory, (sales_history) => sales_history.product)
-    sales_history;
+    // it`s neeeeed ?
+    @OneToMany(() => ProductMaterial, (product_material) => product_material.product)
+    productMaterial: ProductMaterial[]
 }

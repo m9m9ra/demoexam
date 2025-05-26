@@ -1,17 +1,17 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Product } from "./Product";
 
-@Entity("product_types")
+@Entity()
 export class ProductType {
-    @PrimaryGeneratedColumn()
-    product_type_id;
+    @PrimaryGeneratedColumn({type: "integer"})
+    product_type_id: number
 
-    @Column()
-    product_type_name: string;
+    @Column({ type: 'varchar' })
+    type: string;
 
-    @Column({type: 'decimal'})
+    @Column({ type: 'decimal' })
     coefficient: number;
 
-    @OneToMany(() => Product, (product) => product.product_type)
-    products;
+    @OneToMany(() => Product, (product) => product.productType)
+    product: Product[]
 }

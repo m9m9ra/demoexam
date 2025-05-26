@@ -1,13 +1,17 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Materia } from "./Material";
 
-@Entity("material_types")
+@Entity()
 export class MaterialType {
-    @PrimaryGeneratedColumn()
-    material_type_id;
+    @PrimaryGeneratedColumn({type: "integer"})
+    material_type_id: number
 
-    @Column({ type: "varchar", length: 100, nullable: false })
-    material_type_name;
+    @Column({ type: 'varchar' })
+    type: string;
 
-    @Column({ type: "decimal", precision: 5, scale: 2 })
-    defect_percentage;
+    @Column({ type: 'decimal', precision: 5, scale: 2})
+    defectPercentage;
+
+    @OneToMany(() => Materia, (materia) => materia.materialType)
+    material: Materia[]
 }
